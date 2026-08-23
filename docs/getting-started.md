@@ -13,8 +13,8 @@ pip install reionemu
 or from source (editable):
 
 ```bash
-git clone https://github.com/RobertxPearce/reionization-emulator.git
-cd reionization-emulator
+git clone https://github.com/reionemu/reionemu.git
+cd reionemu
 python -m pip install -e .
 ```
 

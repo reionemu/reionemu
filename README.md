@@ -1,5 +1,5 @@
-[![CI](https://github.com/RobertxPearce/reionization-emulator/actions/workflows/ci.yml/badge.svg)](https://github.com/RobertxPearce/reionization-emulator/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-online-blue)](https://robertxpearce.github.io/reionization-emulator/)
+[![CI](https://github.com/reionemu/reionemu/actions/workflows/ci.yml/badge.svg)](https://github.com/reionemu/reionemu/actions/workflows/ci.yml)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://reionemu.github.io/reionemu/)
 [![PyPI](https://img.shields.io/pypi/v/reionemu)](https://pypi.org/project/reionemu/)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -7,7 +7,7 @@
 <!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21766410.svg)](https://doi.org/10.5281/zenodo.21766410) -->
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/RobertxPearce/reionization-emulator/main/docs/assets/reionemu-logo.png" alt="reionemu logo" width="300">
+    <img src="https://raw.githubusercontent.com/reionemu/docs/main/assets/reionemu-logo.png" alt="reionemu logo" width="300">
 </p>
 
 # reionemu
@@ -27,8 +27,8 @@ pip install reionemu
 Or from source (editable):
 
 ```bash
-git clone https://github.com/RobertxPearce/reionization-emulator.git
-cd reionization-emulator
+git clone https://github.com/reionemu/reionemu.git
+cd reionemu
 python -m pip install -e .
 ```
 
@@ -181,7 +181,7 @@ print(best.config)
 print(best.metrics["best_val_loss"])
 ```
 
-For a full pipeline example (condense → compute power spectra → build training data → tune/train/evaluate), scientific context, and complete usage examples, see the full documentation: [Homepage](https://robertxpearce.github.io/reionization-emulator/)
+For a full pipeline example (condense → compute power spectra → build training data → tune/train/evaluate), scientific context, and complete usage examples, see the full documentation: [Homepage](https://reionemu.github.io/reionemu/)
 
 ---
 
@@ -224,7 +224,7 @@ Import from the top-level package after `pip install reionemu`:
 - **Training helpers:** `build_four_param_model`, `build_mc_dropout_model`, `build_optimizer`, `mse`, `rmse`, `mean_relative_error`, `physical_mean_relative_error`
 - **Tuning:** `train_four_param_tune`, `default_param_space`, `run_tune_four_param`
 
-For full API reference, module documentation, and usage guides, visit: [Homepage](https://robertxpearce.github.io/reionization-emulator/)
+For full API reference, module documentation, and usage guides, visit: [Homepage](https://reionemu.github.io/reionemu/)
 
 ---
 

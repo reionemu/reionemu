@@ -49,9 +49,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://robertxpearce.github.io/reionization-emulator/"
-Repository = "https://github.com/RobertxPearce/reionization-emulator"
-Issues = "https://github.com/RobertxPearce/reionization-emulator/issues"
+Homepage = "https://reionemu.github.io/reionemu/"
+Repository = "https://github.com/reionemu/reionemu"
+Issues = "https://github.com/reionemu/reionemu/issues"
 
 [tool.ruff]
 line-length = 88

@@ -9,8 +9,8 @@ authors:
     orcid: "https://orcid.org/0009-0004-5143-8747"
 
 abstract: "Python package for emulating the kSZ angular power spectrum from reionization simulations, with uncertainty quantification."
-repository-code: "https://github.com/RobertxPearce/reionization-emulator"
-url: "https://robertxpearce.github.io/reionization-emulator/"
+repository-code: "https://github.com/reionemu/reionemu"
+url: "https://reionemu.github.io/reionemu/"
 version: "0.3.0"
 doi: "10.5281/zenodo.21766410"
 date-released: "2026-08-02"
