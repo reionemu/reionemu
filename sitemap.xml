@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/api-overview/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/api-overview/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/getting-started/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/getting-started/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/api/artifacts/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/api/artifacts/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/api/data-loading/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/api/data-loading/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/api/hyperparameter-tuning/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/api/hyperparameter-tuning/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/api/models/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/api/models/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/api/simulation-io/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/api/simulation-io/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
     <url>
-         <loc>https://robertxpearce.github.io/reionization-emulator/api/training/</loc>
-         <lastmod>2026-08-03</lastmod>
+         <loc>https://reionemu.github.io/reionemu/api/training/</loc>
+         <lastmod>2026-08-23</lastmod>
     </url>
 </urlset>
