@@ -7,7 +7,7 @@
 <!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21766410.svg)](https://doi.org/10.5281/zenodo.21766410) -->
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/reionemu/docs/main/assets/reionemu-logo.png" alt="reionemu logo" width="300">
+    <img src="https://raw.githubusercontent.com/reionemu/reionemu/main/docs/assets/reionemu-logo.png" alt="reionemu logo" width="300">
 </p>
 
 # reionemu
