@@ -133,54 +133,6 @@ pred_mean, pred_std, samples_dl, samples_log = reionemu.predict_mc(
 print(pred_mean, pred_std)
 ```
 
-If you want to tune the four-parameter architecture with Ray Tune before training a final model, you can work directly with the loaded arrays:
-
-```python
-from pathlib import Path
-
-import reionemu
-from ray import tune
-
-h5_path = Path("path/to/condensed.h5")
-X, Y, ell = reionemu.load_training_arrays(h5_path)
-
-split_idx = int(0.8 * len(X))
-X_train, X_val = X[:split_idx], X[split_idx:]
-Y_train, Y_val = Y[:split_idx], Y[split_idx:]
-
-param_space = {
-    "hidden_dim": tune.choice([20, 32, 64]),
-    "num_hidden_layers": tune.choice([1, 2, 3]),
-    "activation": tune.choice(["relu", "silu", "tanh"]),
-    "optimizer": tune.choice(["adam", "adamw"]),
-    "lr": tune.loguniform(3e-4, 2e-3),
-    "weight_decay": tune.loguniform(1e-8, 1e-4),
-    "batch_size": tune.choice([16, 32, 64]),
-    "epochs": 150,
-    "early_stopping_patience": tune.choice([10, 15]),
-    "gradient_clipping": tune.choice([None, 0.5, 1.0]),
-    "normalize_X": True,
-    "normalize_Y": False,
-}
-
-results = reionemu.run_tune_four_param(
-    X_train=X_train,
-    Y_train=Y_train,
-    X_val=X_val,
-    Y_val=Y_val,
-    param_space=param_space,
-    num_samples=20,
-    max_concurrent_trials=2,
-    device="cpu",
-    storage_path="ray_results",
-    experiment_name="four_param_search",
-)
-
-best = results.get_best_result(metric="val_loss", mode="min")
-print(best.config)
-print(best.metrics["best_val_loss"])
-```
-
 For a full pipeline example (condense → compute power spectra → build training data → tune/train/evaluate), scientific context, and complete usage examples, see the full documentation: [Homepage](https://reionemu.github.io/reionemu/)
 
 ---
@@ -193,22 +145,20 @@ The kinetic Sunyaev-Zel'dovich (kSZ) effect arises from the scattering of CMB ph
 
 ## Repository structure
 
-| Path                     | Description                                                                            |
-|--------------------------|----------------------------------------------------------------------------------------|
-| **`src/reionemu/`**      | Core library (pip-installable package)                                                 |
-| `src/reionemu/simio/`    | Simulation I/O, power spectrum computation, training-array building                    |
-| `src/reionemu/data/`     | Dataloaders, normalization                                                             |
-| `src/reionemu/artifact/` | JSON experiment manifests, config/results saving, normalizer and checkpoint sidecars   |
-| `src/reionemu/models/`   | Baseline and experimental emulator architectures                                       |
-| `src/reionemu/training/` | Training loop, K-fold cross-validation, metrics, and model builders                    |
-| `src/reionemu/tuning/`   | Ray Tune integration for hyperparameter search                                         |
-| **`scripts/`**           | Dataset builder, HPC runners, sampling (environment-specific)                          |
-| **`notebooks/`**         | Analysis and training examples                                                         |
-| **`docs/`**              | Documentation source code                                                              |
-| `datasets/`              | Raw and processed datasets (not tracked)                                               |
-| `results/`               | Visualizations for simulation checks, parameter-space validation, and model evaluation |
+| Path                     | Description                                                                          |
+|--------------------------|--------------------------------------------------------------------------------------|
+| **`src/reionemu/`**      | Core library (pip-installable package)                                               |
+| `src/reionemu/simio/`    | Simulation I/O, power spectrum computation, training-array building                  |
+| `src/reionemu/data/`     | Dataloaders and normalization                                                        |
+| `src/reionemu/artifact/` | JSON experiment manifests, config/results saving, normalizer and checkpoint helpers |
+| `src/reionemu/models/`   | Baseline and MC-dropout emulator architectures                                      |
+| `src/reionemu/training/` | Training loop, K-fold cross-validation, metrics, and model builders                  |
+| `src/reionemu/tuning/`   | Ray Tune integration for hyperparameter search                                       |
+| **`docs/`**              | Documentation source code                                                            |
+| **`.github/`**           | CI and release workflows                                                             |
 
-The **core API** is in `src/reionemu/`. Scripts under `scripts/hpc/` and `scripts/sampling/` are for cluster and sampling workflows and may use machine-specific paths; the library itself is portable.
+Paper-specific notebooks, scripts, datasets, checkpoints, generated figures, and run records live in:
+[reionemu/reionemu-pasa-2026](https://github.com/reionemu/reionemu-pasa-2026).
 
 ---
 
