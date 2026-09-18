@@ -40,12 +40,39 @@ hide:
 
 ## Start here
 
-- [Getting Started](getting-started.md) outlines what to include for installation, verification, and contributor setup.
-- [API Overview](api-overview.md) gives you a structure for documenting the public surface area.
+- [Getting Started](getting-started.md) covers installation, a quick check that the package imports, and a first training run.
+- [API Overview](api-overview.md) maps the public API onto the pipeline, from simulation output to saved experiment artifact.
 
 ## Repository layout
 
-- Core package: `src/reionemu/`
-- Scripts and HPC workflows: `scripts/`
-- Research notebooks: `notebooks/`
-- Documentation source: `docs/`
+The [reionemu/reionemu](https://github.com/reionemu/reionemu) repository holds only the package and its documentation:
+
+- Core Package: `src/reionemu/`
+- Documentation Source: `docs/`
+
+## Citation
+
+If `reionemu` contributes to work you publish, please cite both the software and the relevant paper.
+
+### Software
+
+This entry uses the concept DOI, which always resolves to the latest release.
+
+```bibtex
+@software{pearce_reionemu,
+  author    = {Pearce, Robert},
+  title     = {{reionemu: Python package for emulating the kSZ angular power spectrum from reionization simulations}},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.21766410},
+  url       = {https://doi.org/10.5281/zenodo.21766410},
+}
+```
+
+GitHub's **Cite this repository** button generates BibTeX and APA from [`CITATION.cff`](https://github.com/reionemu/reionemu/blob/main/CITATION.cff) automatically for the most current release.
+
+### Papers
+
+*An Uncertainty-Aware Machine Learning Emulator for the Reionisation kSZ Power Spectrum*, Robert Pearce and Paul La Plante, in preparation (2026).
+
+- Notebooks, scripts, datasets, and figures for the paper live in [reionemu/reionemu-pasa-2026](https://github.com/reionemu/reionemu-pasa-2026), which installs `reionemu` from PyPI.

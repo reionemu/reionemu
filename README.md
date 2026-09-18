@@ -1,10 +1,9 @@
 [![CI](https://github.com/reionemu/reionemu/actions/workflows/ci.yml/badge.svg)](https://github.com/reionemu/reionemu/actions/workflows/ci.yml)
-[![Docs](https://img.shields.io/badge/docs-online-blue)](https://reionemu.github.io/reionemu/)
+[![Docs](https://img.shields.io/badge/docs-online-blue)](https://reionemu.org/reionemu/)
 [![PyPI](https://img.shields.io/pypi/v/reionemu)](https://pypi.org/project/reionemu/)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.21766410-blue)](https://doi.org/10.5281/zenodo.21766410)
-<!-- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21766410.svg)](https://doi.org/10.5281/zenodo.21766410) -->
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/reionemu/reionemu/main/docs/assets/reionemu-logo.png" alt="reionemu logo" width="300">
@@ -12,11 +11,9 @@
 
 # reionemu
 
-A modular Python package for building machine-learning emulators of the kinetic Sunyaev-Zel'dovich (kSZ) angular power spectrum from kSZ 2LPT reionization simulations. It includes tools to condense simulation outputs, compute flat-sky power spectra, assemble training datasets, train neural networks that predict binned rescaled kSZ power spectra from reionization parameters, and save lightweight experiment artifacts for reproducibility.
+Machine-learning emulators for the kinetic Sunyaev-Zel'dovich (kSZ) angular power spectrum from reionization simulations, with uncertainty quantification.
 
-The goal is to learn a fast surrogate model that maps reionization parameters → binned kSZ power spectrum, enabling rapid exploration of cosmological parameter space without re-running expensive simulations.
-
----
+The kSZ effect arises when CMB photons scatter off free electrons with bulk motion, and its angular power spectrum carries information about the timing, duration, and structure of reionization. `reionemu` learns the mapping of reionization parameters to binned kSZ power spectra, so parameter space can be explored without rerunning expensive simulations.
 
 ## Installation
 
@@ -24,171 +21,99 @@ The goal is to learn a fast surrogate model that maps reionization parameters �
 pip install reionemu
 ```
 
-Or from source (editable):
-
-```bash
-git clone https://github.com/reionemu/reionemu.git
-cd reionemu
-python -m pip install -e .
-```
-
-**Requirements:** Python 3.10+, NumPy, HDF5, PyTorch, and Ray Tune.
-
----
+Requires Python 3.10+. Installs NumPy, h5py, PyTorch, and Ray Tune.
 
 ## Quick start
 
-After installing, you can load a processed HDF5 training dataset, create dataloaders, and train the baseline deterministic 4-parameter emulator:
+Train the MC-dropout emulator on a condensed HDF5 dataset, then predict with uncertainties:
 
 ```python
 from pathlib import Path
+
+import numpy as np
 import torch
+
 import reionemu
 
-# Path to a condensed HDF5 that already has /training (X, Y, ell)
-h5_path = Path("path/to/condensed.h5")
+# An HDF5 file that already contains /training (X, Y, ell)
+h5_path = Path("condensed.h5")
 
-# Dataloaders with train/val split and optional normalization
 loaders, normalizers, ell = reionemu.make_dataloaders(
     h5_path,
     split={"train": 0.8, "val": 0.2},
     config=reionemu.DataLoaderConfig(batch_size=32, seed=42),
 )
 
-# Baseline 4-parameter model, optimizer, loss
-model = reionemu.FourParamEmulator()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-loss_fn = torch.nn.MSELoss()
-
-# Train for a few epochs
+model = reionemu.MCDropoutEmulator(dropout_rate=0.1)
 history = reionemu.fit(
     model,
     loaders["train"],
     loaders["val"],
-    optimizer,
-    loss_fn,
-    config=reionemu.FitConfig(epochs=10, device="cpu"),
-)
-
-# Validation loss per epoch
-print(history["val_loss"])
-
-# Save a lightweight experiment artifact
-artifact_dir = reionemu.save_artifact(
-    "baseline_four_param",
-    Path("artifacts"),
-    dataset_path=h5_path,
-    dataloader_config=reionemu.DataLoaderConfig(batch_size=32, seed=42),
-    fit_config=reionemu.FitConfig(epochs=10, device="cpu"),
-    model_config={
-        "class_name": "FourParamEmulator",
-        "input_dim": 4,
-        "output_dim": 5,
-    },
-    optimizer_config={"name": "Adam", "lr": 1e-3},
-    history=history,
-    normalizers=normalizers,
-    checkpoint=model.state_dict(),
-)
-```
-
-For MC-dropout experiments, use `MCDropoutEmulator` with the MC evaluation path:
-
-```python
-model = reionemu.MCDropoutEmulator(dropout_rate=0.2)
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-
-history = reionemu.fit(
-    model,
-    loaders["train"],
-    loaders["val"],
-    optimizer,
+    torch.optim.Adam(model.parameters(), lr=1e-3),
     torch.nn.MSELoss(),
     config=reionemu.FitConfig(epochs=10, device="cpu"),
-    evaluation="evaluate_mc_metrics",
-    n_mc_samples=50,
 )
 
-print(history["val_mean_predictive_std"])
-```
-
-Once trained, use `predict_mc` to get predictions and uncertainties in physical units. Dropout is redrawn on every call, so seed torch first when you need a reproducible number:
-
-```python
-import numpy as np
-import torch
-
+# (zmean_zre, alpha_zre, kb_zre, b0_zre)
 theta = np.array([[8.0, 0.5, 1.0, 0.45]], dtype=np.float32)
 
-torch.manual_seed(42)
-pred_mean, pred_std, samples_dl, samples_log = reionemu.predict_mc(
+pred_mean, pred_std, _, _ = reionemu.predict_mc(
     theta,
     model,
     X_mean=normalizers["X"].mean,
     X_std=normalizers["X"].std,
-    normalize_X=True,
     n_mc_samples=200,
 )
 
 print(pred_mean, pred_std)
 ```
 
-For a full pipeline example (condense → compute power spectra → build training data → tune/train/evaluate), scientific context, and complete usage examples, see the full documentation: [Homepage](https://reionemu.github.io/reionemu/)
+## What's included
 
----
+| Module | Covers                                                                                |
+| --- |---------------------------------------------------------------------------------------|
+| `simio` | Condense simulation outputs, compute flat-sky power spectra, build training arrays    |
+| `data` | Dataloaders, train/validation splits, normalization                                   |
+| `models` | Deterministic and MC-dropout emulator architectures                                   |
+| `training` | Training loop, K-fold cross-validation, metrics, model builders                       |
+| `tuning` | Ray Tune hyperparameter search                                                        |
+| `artifact` | JSON experiment manifests, normalizers, checkpoints                                   |
 
-## Scientific context
+Everything stable is re-exported at the top level. Experimental variants live under `reionemu.models.experimental`.
 
-The kinetic Sunyaev-Zel'dovich (kSZ) effect arises from the scattering of CMB photons by free electrons with bulk motion, generating secondary temperature anisotropies. The kSZ angular power spectrum carries information about the timing, duration, and structure of reionization. This emulator provides a fast surrogate that maps reionization parameters (zmean_zre, alpha_zre, kb_zre, b0_zre) to binned, rescaled kSZ power spectra, making parameter-space exploration much faster than rerunning the full simulations.
+## Documentation
 
----
+Full API reference, guides, and a worked pipeline example: **[reionemu.org/reionemu](https://reionemu.org/reionemu/)**
 
-## Repository structure
+## Citation
 
-| Path                     | Description                                                                          |
-|--------------------------|--------------------------------------------------------------------------------------|
-| **`src/reionemu/`**      | Core library (pip-installable package)                                               |
-| `src/reionemu/simio/`    | Simulation I/O, power spectrum computation, training-array building                  |
-| `src/reionemu/data/`     | Dataloaders and normalization                                                        |
-| `src/reionemu/artifact/` | JSON experiment manifests, config/results saving, normalizer and checkpoint helpers |
-| `src/reionemu/models/`   | Baseline and MC-dropout emulator architectures                                      |
-| `src/reionemu/training/` | Training loop, K-fold cross-validation, metrics, and model builders                  |
-| `src/reionemu/tuning/`   | Ray Tune integration for hyperparameter search                                       |
-| **`docs/`**              | Documentation source code                                                            |
-| **`.github/`**           | CI and release workflows                                                             |
+If `reionemu` contributes to work you publish, please cite both the software and the relevant paper.
 
-Paper-specific notebooks, scripts, datasets, checkpoints, generated figures, and run records live in:
-[reionemu/reionemu-pasa-2026](https://github.com/reionemu/reionemu-pasa-2026).
+### Software
 
----
+This entry uses the concept DOI, which always resolves to the latest release.
 
-## Main public API
+```bibtex
+@software{pearce_reionemu,
+  author    = {Pearce, Robert},
+  title     = {{reionemu: Python package for emulating the kSZ angular power spectrum from reionization simulations}},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.21766410},
+  url       = {https://doi.org/10.5281/zenodo.21766410},
+}
+```
 
-Import from the top-level package after `pip install reionemu`:
+GitHub's **Cite this repository** button generates BibTeX and APA from [`CITATION.cff`](https://github.com/reionemu/reionemu/blob/main/CITATION.cff) automatically for the most current release.
 
-- **Simulation I/O:** `condense_sim_root`, `CondenseConfig`, `add_cl_to_condensed_h5`, `ClConfig`, `build_and_write_training`, `build_training_arrays`, `BuildXYConfig`, `BuildStats`, `CondenseStats`
-- **Data:** `make_dataloaders`, `load_training_arrays`, `DataLoaderConfig`, `Normalizer`
-- **Artifacts:** `create_artifact_dir`, `save_artifact`, `save_configs`, `save_results`, `save_info`, `save_normalizers`, `load_normalizers`, `save_model_checkpoint`, `dataset_summary`, `file_fingerprint`, `read_json`
-- **Models:** `FourParamEmulator`, `MCDropoutEmulator`, `predict_mc`, `enable_dropout_only` (experimental variants live in `reionemu.models.experimental`)
-- **Training:** `fit`, `FitConfig`, `train_one_epoch`, `evaluate`, `evaluate_metrics`, `evaluate_mc_metrics`, `kfold_cross_validate`, `KFoldConfig`
-- **Training helpers:** `build_four_param_model`, `build_mc_dropout_model`, `build_optimizer`, `mse`, `rmse`, `mean_relative_error`, `physical_mean_relative_error`
-- **Tuning:** `train_four_param_tune`, `default_param_space`, `run_tune_four_param`
+### Papers
 
-For full API reference, module documentation, and usage guides, visit: [Homepage](https://reionemu.github.io/reionemu/)
+*An Uncertainty-Aware Machine Learning Emulator for the Reionisation kSZ Power Spectrum*, Robert Pearce and Paul La Plante, in preparation (2026).
 
----
-
-## Typical workflow
-
-1. **Parameter sampling** - Latin Hypercube Sampling over the 4D reionization parameter space.
-2. **Simulation (HPC)** - Run Zreion (or compatible) simulations; outputs per sim in HDF5.
-3. **Dataset construction** - Use `condense_sim_root` → `add_cl_to_condensed_h5` → `build_and_write_training` to produce a single condensed HDF5 with `/sims` and `/training`.
-4. **Hyperparameter search (optional)** - Use `load_training_arrays` and `run_tune_four_param` to search over model and optimizer settings with Ray Tune.
-5. **Training and evaluation** - Use `make_dataloaders` and `fit` (or `kfold_cross_validate`) to train and evaluate the selected emulator configuration.
-6. **Artifact saving** - Use `save_artifact` to record JSON configs/results plus optional `.npz` normalizers and `.pt` model checkpoints.
-
----
+- Notebooks, scripts, datasets, and figures for the paper live in [reionemu/reionemu-pasa-2026](https://github.com/reionemu/reionemu-pasa-2026), which installs `reionemu` from PyPI.
 
 ## Acknowledgments
 
-This research is conducted in the LEADS Lab at the University of Nevada, Las Vegas, under [Dr. Paul La Plante](https://plaplant.github.io/), with computing resources from the Pittsburgh Supercomputing Center (Bridges-2).
+Developed in the LEADS Lab at the University of Nevada, Las Vegas, under [Dr. Paul La Plante](https://plaplant.github.io/), with computing resources from the Pittsburgh Supercomputing Center (Bridges-2).
+
+Released under the [MIT License](https://github.com/reionemu/reionemu/blob/main/LICENSE).

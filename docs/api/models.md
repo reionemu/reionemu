@@ -334,7 +334,7 @@ dropout_model = build_mc_dropout_model(
 
 ## Experimental Models
 
-Experimental proof-of-concept architectures live under `reionemu.models.experimental`. They are useful for architecture comparisons and older notebook experiments, but they are not the recommended default API.
+Experimental proof-of-concept architectures live under `reionemu.models.experimental`. They are useful for architecture comparisons and for reproducing earlier experiments, but they are not the recommended default API.
 
 Available experimental classes are:
 

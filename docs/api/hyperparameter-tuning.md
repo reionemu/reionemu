@@ -318,11 +318,13 @@ import torch
 best = results.get_best_result(metric="val_loss", mode="min")
 
 with best.checkpoint.as_directory() as checkpoint_dir:
-    metadata = torch.load(f"{checkpoint_dir}/metadata.pt")
+    metadata = torch.load(f"{checkpoint_dir}/metadata.pt", weights_only=False)
 
 print(metadata["best_val_loss"])
 print(metadata["best_epoch"])
 ```
+
+`metadata.pt` stores the fitted `Normalizer` objects alongside the config, so it must be loaded with `weights_only=False` on PyTorch 2.6 and later. Only do this for checkpoints you created yourself.
 
 ## Reproducibility Notes
 
