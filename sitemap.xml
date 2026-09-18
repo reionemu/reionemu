@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://reionemu.github.io/reionemu/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/api-overview/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/api-overview/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/getting-started/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/getting-started/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/api/artifacts/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/api/artifacts/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/api/data-loading/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/api/data-loading/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/api/hyperparameter-tuning/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/api/hyperparameter-tuning/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/api/models/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/api/models/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/api/simulation-io/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/api/simulation-io/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
     <url>
-         <loc>https://reionemu.github.io/reionemu/api/training/</loc>
-         <lastmod>2026-08-23</lastmod>
+         <loc>https://reionemu.org/reionemu/api/training/</loc>
+         <lastmod>2026-09-18</lastmod>
     </url>
 </urlset>

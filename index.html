@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://reionemu.github.io/reionemu/">
+        <link rel="canonical" href="https://reionemu.org/reionemu/">
       
       
       
@@ -438,6 +438,45 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#citation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Citation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Citation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#software" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#papers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Papers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -785,15 +824,33 @@
 
 <h2 id="start-here">Start here<a class="headerlink" href="#start-here" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="getting-started/">Getting Started</a> outlines what to include for installation, verification, and contributor setup.</li>
-<li><a href="api-overview/">API Overview</a> gives you a structure for documenting the public surface area.</li>
+<li><a href="getting-started/">Getting Started</a> covers installation, a quick check that the package imports, and a first training run.</li>
+<li><a href="api-overview/">API Overview</a> maps the public API onto the pipeline, from simulation output to saved experiment artifact.</li>
 </ul>
 <h2 id="repository-layout">Repository layout<a class="headerlink" href="#repository-layout" title="Permanent link">&para;</a></h2>
+<p>The <a href="https://github.com/reionemu/reionemu">reionemu/reionemu</a> repository holds only the package and its documentation:</p>
 <ul>
-<li>Core package: <code>src/reionemu/</code></li>
-<li>Scripts and HPC workflows: <code>scripts/</code></li>
-<li>Research notebooks: <code>notebooks/</code></li>
-<li>Documentation source: <code>docs/</code></li>
+<li>Core Package: <code>src/reionemu/</code></li>
+<li>Documentation Source: <code>docs/</code></li>
+</ul>
+<h2 id="citation">Citation<a class="headerlink" href="#citation" title="Permanent link">&para;</a></h2>
+<p>If <code>reionemu</code> contributes to work you publish, please cite both the software and the relevant paper.</p>
+<h3 id="software">Software<a class="headerlink" href="#software" title="Permanent link">&para;</a></h3>
+<p>This entry uses the concept DOI, which always resolves to the latest release.</p>
+<pre><code class="language-bibtex">@software{pearce_reionemu,
+  author    = {Pearce, Robert},
+  title     = {{reionemu: Python package for emulating the kSZ angular power spectrum from reionization simulations}},
+  year      = {2026},
+  publisher = {Zenodo},
+  doi       = {10.5281/zenodo.21766410},
+  url       = {https://doi.org/10.5281/zenodo.21766410},
+}
+</code></pre>
+<p>GitHub's <strong>Cite this repository</strong> button generates BibTeX and APA from <a href="https://github.com/reionemu/reionemu/blob/main/CITATION.cff"><code>CITATION.cff</code></a> automatically for the most current release.</p>
+<h3 id="papers">Papers<a class="headerlink" href="#papers" title="Permanent link">&para;</a></h3>
+<p><em>An Uncertainty-Aware Machine Learning Emulator for the Reionisation kSZ Power Spectrum</em>, Robert Pearce and Paul La Plante, in preparation (2026).</p>
+<ul>
+<li>Notebooks, scripts, datasets, and figures for the paper live in <a href="https://github.com/reionemu/reionemu-pasa-2026">reionemu/reionemu-pasa-2026</a>, which installs <code>reionemu</code> from PyPI.</li>
 </ul>
 
 

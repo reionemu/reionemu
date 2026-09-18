@@ -10,7 +10,7 @@
       
       
       
-        <link rel="canonical" href="https://reionemu.github.io/reionemu/api/hyperparameter-tuning/">
+        <link rel="canonical" href="https://reionemu.org/reionemu/api/hyperparameter-tuning/">
       
       
         <link rel="prev" href="../training/">
@@ -1337,11 +1337,12 @@ history = fit(
 best = results.get_best_result(metric=&quot;val_loss&quot;, mode=&quot;min&quot;)
 
 with best.checkpoint.as_directory() as checkpoint_dir:
-    metadata = torch.load(f&quot;{checkpoint_dir}/metadata.pt&quot;)
+    metadata = torch.load(f&quot;{checkpoint_dir}/metadata.pt&quot;, weights_only=False)
 
 print(metadata[&quot;best_val_loss&quot;])
 print(metadata[&quot;best_epoch&quot;])
 </code></pre>
+<p><code>metadata.pt</code> stores the fitted <code>Normalizer</code> objects alongside the config, so it must be loaded with <code>weights_only=False</code> on PyTorch 2.6 and later. Only do this for checkpoints you created yourself.</p>
 <h2 id="reproducibility-notes">Reproducibility Notes<a class="headerlink" href="#reproducibility-notes" title="Permanent link">&para;</a></h2>
 <p>The tuning helpers use train/validation arrays exactly as passed to the function. If you want a reproducible split, create that split with a fixed seed before calling <code>run_tune_four_param(...)</code>.</p>
 <p>The current default search space does not set a PyTorch random seed inside each trial. Ray Tune will track the sampled hyperparameters and metrics, but exact training curves can still vary across runs because of model initialization, dataloader shuffling, and hardware-level nondeterminism.</p>
